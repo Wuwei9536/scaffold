@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=11"/>
+        <link rel="dns-prefetch" href="//image-c.weimobwmc.com">
+        <link rel="shortcut icon" href="//statichome.weimob.com/favicon.ico" type="image/x-icon">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="theme-color" content="#000000">
+        <meta name="format-detection" content="telephone=no" />
+        <title>scaffold</title>
+        <style>
+            .weimob-loading-image {
+            width: 120px;
+            height: 60px;
+            background-image: url(//cdn.weimob.com/saas/common/images/weimob_loading.png);
+            -webkit-animation: loaderSprite 1.12s steps(22, end)infinite;
+            animation: loaderSprite 1.12s steps(22, end)infinite;
+            visibility: visible;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transform-origin: 50% 50%;
+            }
+        
+            @keyframes loaderSprite {
+            from {
+                background-position: 0
+            }
+            to {
+                background-position: -2640px
+            }
+            }
+        </style>
+        <% const publicPath = htmlWebpackPlugin.options.publicPath|| "" %>
+        <% _.forEach(htmlWebpackPlugin.files.css, (css) => { %>
+        <link href="<%= publicPath + css %>" rel="stylesheet">
+        <% }); %>
+    </head>
+    <body>
+        <div id="app">
+            <div class="weimob-loading-image"></div>
+        </div>
+        <script>
+            window.publicPath = '<%= publicPath %>';
+        </script>
+        <% _.forEach(htmlWebpackPlugin.files.js, (js) => {%>
+        <script type="text/javascript" src="<%- publicPath + js %>" ></script>
+        <% }); %>
+    </body>
+</html>
