@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { proxy, alias } = require('../config');
+// const { proxy, alias } = require('../config');
 const base = require('./webpack.config.base.js');
 
 process.env.NODE_ENV = "development";
@@ -23,7 +23,12 @@ module.exports = merge(
             overlay: true,
             inline: true,
             stats: "errors-only",
-            proxy
+            proxy: {
+                "/api": {
+                    "changeOrigin": true,
+                    "target": "http://weekly.hsmob.com"
+                }
+            }
         },
         output: {
             hotUpdateChunkFilename: "public/[id].[hash].hot-update.js",

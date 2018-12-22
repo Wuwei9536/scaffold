@@ -37,15 +37,14 @@ export default class ListItem extends React.Component {
                                 <Card bordered={false} className={style.greyBackground}>
                                     <div className={style.cardItem}>
                                         <Tag color="#87d068">进展</Tag>
-                                        <p className={style.noBottom}>{box.details1}</p>
+                                        <p className={style.marginbottom0}>{box.details1}</p>
                                     </div>
                                     <div className={style.cardItem}>
                                         <Tag color="#87d068">进展</Tag>
-                                        <p className={style.noBottom}>{box.details2}</p>
+                                        <p className={style.marginbottom0}>{box.details2}</p>
                                     </div>
                                     <div className={style.cardItem}>
-                                        <Tag color="#87d068">进展</Tag>
-                                        <p className={style.noBottom}>Card content</p>
+                                        <p className={style.marginbottom0}>...</p>
                                     </div>
                                 </Card>) : null
                     }

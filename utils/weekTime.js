@@ -20,6 +20,7 @@ const endDate = { // 每月最后一天日期
     twentyEight:  28
 };
 
+// 取一个月的weekTime
 const judgeMouthWeek = (month, date, day, maxdate) => { // 月份 日期 星期 该月最大天数
     if (day === 0) { // moment库的星期天返回的是0
         day = 7;
@@ -43,6 +44,7 @@ const judgeMouthWeek = (month, date, day, maxdate) => { // 月份 日期 星期 
     return timeShow;
 };
 
+// 取指定季度的weekTime
 const initTimeShow = (year, month, date, quarter) => { // month为moment().month()+1 // 年 月 日 季度
     const { Jan, FebNormal, FebMore, Mar, Apr, May, June, July, Aug, Sept, Oct, Nov, Dec,
         thirtyOne, thirty, twentyEight, twentyNine } = endDate;

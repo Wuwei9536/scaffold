@@ -1,11 +1,11 @@
 const PROXYS = {
     'dev': {
-        "/weather": {
+        "/api": {
             "changeOrigin": true,
-            "target": "https://www.sojson.com/",
-            pathRewrite: {
-                '^/weather' : ''
-            }
+            "target": "http://weekly.hsmob.com"
+            // pathRewrite: {
+            //     '^/api' : ''
+            // }
         }
     },
     'online': {
