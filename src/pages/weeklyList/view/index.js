@@ -28,14 +28,14 @@ class WeeklyList extends React.Component {
     static propTypes = {
         data: PropTypes.shape({}).isRequired,
         weeklyListActions: PropTypes.shape({}).isRequired,
-        requestResult:PropTypes.bool.isRequired
+        requestResult: PropTypes.bool.isRequired
         // route: PropTypes.shape({
         //     routes: PropTypes.arrayOf(PropTypes.shape({}))
         // }).isRequired
     }
 
     componentWillMount() {
-        console.log("will mount");
+        console.log("%cwill mount", 'font-size:15px;background-color: rgb(135, 208, 104);');
     }
 
     componentDidMount() {
@@ -90,6 +90,7 @@ class WeeklyList extends React.Component {
     render() {
         console.log("render");
         const { data, requestResult } = this.props;
+        console.log('%cdata: ', 'font-size:15px;background-color: rgb(135, 208, 104);', data);
         const { timeShow } = this.state;
         return (
             <>

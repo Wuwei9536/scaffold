@@ -1,21 +1,38 @@
 import React from 'react';
-import { Router } from 'react-router-dom';
+import { Router, Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
+import RenderAuthorized from 'ant-design-pro/lib/Authorized';
 import { renderRoutes } from 'react-router-config';
 import store from './redux/store';
 import Routes from './router';
+import Login from './pages/logIn/view';
 
-const App = ({ history }) => (
-    <Provider store={store}>
-        <Router history={history}>
-            {renderRoutes(Routes)}
-        </Router>
-    </Provider>
-);
 
-App.propTypes = {
-    history: PropTypes.shape({}).isRequired
-};
+class App extends React.Component {
+    static propTypes = {
+        history: PropTypes.shape({}).isRequired,
+        authority: PropTypes.string.isRequired
+    }
 
-export default App;
+    render() {
+        const { history, authority } = this.props;
+        const Authorized = RenderAuthorized("user");
+        return (
+            <Router history={history}>
+                <Switch>
+                    <Route path='/user' exact component={Login} />
+                    <Authorized authority={['user', 'admin']} noMatch={<Redirect to="/user" />}>
+                        {renderRoutes(Routes)}
+                    </Authorized>
+                </Switch>
+            </Router>
+        );
+    }
+}
+const mapStateToProps = state => ({
+    authority: state.ReducerLogin.ladp
+});
+
+
+export default connect(mapStateToProps)(App);

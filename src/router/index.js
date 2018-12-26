@@ -4,12 +4,13 @@ import Loadable from 'react-loadable';
 import LayOut from '../pages/layOut/view';
 import WeekList from '../pages/weeklyList/view';
 import Login from '../pages/logIn/view';
+import Edit from '../pages/edit/view';
 
 export default [
-  {
-    path:'/user',
-    component:Login
-  },
+  // {
+  //   path:'/user',
+  //   component:Login
+  // },
   {
     path: '/',
     component: LayOut,
@@ -24,7 +25,7 @@ export default [
       },
       {
         path: '/OKR',
-        component: WeekList,
+        component: Edit,
         exact: true,
         key: 'OKR'
       },

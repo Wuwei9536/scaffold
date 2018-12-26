@@ -26,7 +26,7 @@ module.exports = merge(
             proxy: {
                 "/api": {
                     "changeOrigin": true,
-                    "target": "http://weekly.hsmob.com"
+                    "target": "http://weekly-dev.hsmob.com"
                 }
             }
         },

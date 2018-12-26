@@ -8,7 +8,6 @@ import WeekList from './pages/weeklyList/view';
 import 'antd/dist/antd.less';
 import 'ant-design-pro/dist/ant-design-pro.css';
 
-
 history.listen((location, action) => {
     if (action === 'PUSH') {
         window.scroll(0, 0);
@@ -17,6 +16,8 @@ history.listen((location, action) => {
 
 
 ReactDom.render(
-    <App history={history} />,
+    <Provider store={store}>
+        <App history={history} />
+    </Provider>,
     document.getElementById('app')
 );
