@@ -7,13 +7,14 @@ import { Alert, Checkbox } from 'antd';
 import { Link } from 'react-router-dom';
 import style from '../style/index.less';
 import * as LoginActions from '../../../redux/actions/action/action.Login';
+import history from '../../../../utils/history';
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 
 class LoginDemo extends React.Component {
   state = {
     notice: '',
-    type: 'tab2',
+    type: 'tab1',
     autoLogin: true
   }
 
@@ -25,26 +26,12 @@ class LoginDemo extends React.Component {
     let username = "";
     const { autoLogin, type } = this.state;
     const { LoginActions } = this.props;
-    console.log('value collected ->', { ...values, autoLogin: autoLogin });
-    if (type === 'tab1') {
-      this.setState({
-        notice: ''
-      }, () => {
-        if (!err && (values.username !== 'admin' || values.password !== '888888')) {
-          setTimeout(() => {
-            this.setState({
-              notice: 'The combination of username and password is incorrect!'
-            });
-          }, 500);
-        }
-      });
-    }
     if (values.username) {
       username = values.username;
     }
+    window.localStorage.setItem("account", username);
     LoginActions.AddLadp(username);
-    // eslint-disable-next-line
-    // this.props.history.go(-1);
+    history.push('/');
   }
 
   onTabChange = (key) => {

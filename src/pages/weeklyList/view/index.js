@@ -10,6 +10,7 @@ import SelectView from '../../../components/select-view';
 import * as WeeklyListActions from '../../../redux/actions/action/action-weeklyList';
 import InitTimeShow from '../../../../utils/weekTime';
 import Loading from './loading';
+import history from '../../../../utils/history';
 
 const FormItem = Form.Item;
 const yearNow = moment().year();
@@ -21,27 +22,23 @@ class WeeklyList extends React.Component {
     constructor() {
         super();
         this.state = {
-            timeShow: []
+            timeShow: [],
+            requestResult: false
         };
     }
 
     static propTypes = {
         data: PropTypes.shape({}).isRequired,
-        weeklyListActions: PropTypes.shape({}).isRequired,
-        requestResult: PropTypes.bool.isRequired
+        weeklyListActions: PropTypes.shape({}).isRequired
         // route: PropTypes.shape({
         //     routes: PropTypes.arrayOf(PropTypes.shape({}))
         // }).isRequired
     }
 
-    componentWillMount() {
-        console.log("%cwill mount", 'font-size:15px;background-color: rgb(135, 208, 104);');
-    }
 
     componentDidMount() {
-        console.log("mount");
-        this.requestData("/api/support/week/getWeeklys", { "qtype": 4, "userId": "", "year": 2018 });
         let timeShow = InitTimeShow(yearNow, monthNow, dateNow, quarterNow);
+        this.requestData("/api/support/week/getWeeklys", { "qtype": quarterNow, "userId": "", "year": yearNow });
         this.setState({ timeShow });
     }
 
@@ -56,10 +53,9 @@ class WeeklyList extends React.Component {
         fetch(url, opts).then((res) => {
             return res.json();
         }).then((res) => {
-            console.log("res", res);
             const { weeklyListActions } = this.props;
             weeklyListActions.setWeeklyListData(res.data);
-            weeklyListActions.setRequestResult(true);
+            this.setState({ requestResult: true });
         }).catch((error) => {
             console.log("error", error);
         });
@@ -86,12 +82,34 @@ class WeeklyList extends React.Component {
         this.setState({ timeShow });
     }
 
+    onButtonClick = (e, month, week, weekTime) => {
+        let data = {
+            year: yearNow,
+            month,
+            qtype: quarterNow,
+            week: week - 1,
+            weekTime,
+            from: 1
+        };
+        let path = {
+            pathname: '/edit',
+            state: data
+        };
+        history.push(path);
+    }
+
+    DetailsClick = (e, id) => {
+        let path = {
+            pathname: '/details',
+            state: { weeklyId: id }
+        };
+        history.push(path);
+    }
+
 
     render() {
-        console.log("render");
-        const { data, requestResult } = this.props;
-        console.log('%cdata: ', 'font-size:15px;background-color: rgb(135, 208, 104);', data);
-        const { timeShow } = this.state;
+        const { data } = this.props;
+        const { timeShow, requestResult } = this.state;
         return (
             <>
                 {requestResult
@@ -111,12 +129,15 @@ class WeeklyList extends React.Component {
                                     quarter={quarterNow}
                                 />
                                 <FormItem>
-                                    <span>...的周报</span>
+                                    {/* eslint-disable */}
+                                    <span>{data.weeklyInfo.userName}的周报</span>
                                 </FormItem>
                             </Form>
                             <ListView
+                                onDetailsClick={this.DetailsClick}
                                 data={timeShow}
                                 qweeks={data.weeklyInfo.qweeks}
+                                onButtonClick={this.onButtonClick}
                             />
                         </Card>) : <Icon type="loading" className={style.localCenter} />}
             </>
@@ -125,7 +146,6 @@ class WeeklyList extends React.Component {
 }
 const mapStateToProps = state => ({
     data: state.ReducerWeeklyList.data,
-    requestResult: state.ReducerWeeklyList.requestResult
 });
 
 const mapDispatchToProps = dispatch => ({

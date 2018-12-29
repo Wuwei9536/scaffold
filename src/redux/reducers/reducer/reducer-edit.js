@@ -1,95 +1,12 @@
 import actions from '../../actions/types/type-edit';
 
 const editData = {
-    dataProgress: [
-        {
-            "weeklyDetailId": 2,
-            "summary": "本周干了。。。",
-            "krId": 123456,
-            "oDetail": "目标目标目标",
-            "krDetail": "结果结果结果",
-            "details": "1、实现了系统的基础设计   2、实现了...",
-            "weeklyType": 1
-        },
-        {
-            "weeklyDetailId": 2,
-            "summary": "本周干了。。。",
-            "krId": 123456,
-            "oDetail": "目标目标目标",
-            "krDetail": "结果结果结果",
-            "details": "1、实现了系统的基础设计   2、实现了...",
-            "weeklyType": 1
-        }
-    ],
-    dataPlan: [
-        {
-            "weeklyDetailId": 2,
-            "summary": "本周干了。。。",
-            "krId": 123456,
-            "oDetail": "目标目标目标",
-            "krDetail": "结果结果结果",
-            "details": "1、实现了系统的基础设计   2、实现了...",
-            "weeklyType": 1
-        },
-        {
-            "weeklyDetailId": 2,
-            "summary": "本周干了。。。",
-            "krId": 123456,
-            "oDetail": "目标目标目标",
-            "krDetail": "结果结果结果",
-            "details": "1、实现了系统的基础设计   2、实现了...",
-            "weeklyType": 1
-        }
-    ],
-    dataProblem: [
-        {
-            "weeklyDetailId": 2,
-            "summary": "本周干了。。。",
-            "krId": 123456,
-            "oDetail": "目标目标目标",
-            "krDetail": "结果结果结果",
-            "details": "1、实现了系统的基础设计   2、实现了...",
-            "weeklyType": 1
-        },
-        {
-            "weeklyDetailId": 2,
-            "summary": "本周干了。。。",
-            "krId": 123456,
-            "oDetail": "目标目标目标",
-            "krDetail": "结果结果结果",
-            "details": "1、实现了系统的基础设计   2、实现了...",
-            "weeklyType": 1
-        }
-    ],
-    okrs: [{
-        "oDetail": "目标1目标",
-        "krs": [{
-            "krId": 123456,
-            "krDetail": "结果结果结果"
-        },
-        {
-            "krId": 123456,
-            "krDetail": "其他 默认添加"
-        }]
-    },
-    {
-        "oDetail": "目标1目标",
-        "krs": [{
-            "krId": 123456,
-            "krDetail": "结果结果结果"
-        },
-        {
-            "krId": 123456,
-            "krDetail": "其他 默认添加"
-        }]
-    },
-    {
-        "oDetail": "其他 默认添加",
-        "krs": [{
-            "krId": 123456,
-            "krDetail": "其他默认添加"
-        }]
-    }]
+    editShow: false,
+    dataProgress: [{}],
+    dataPlan: [{}],
+    dataProblem: [{}],
+    okrs: [{}],
+    weekVoEdit: {}
 };
 
 export default function Edit(state = editData, action) {
@@ -108,6 +25,21 @@ export default function Edit(state = editData, action) {
             return {
                 ...state,
                 dataProblem: action.dataProblem
+            };
+        case actions.SET_OKR:
+            return {
+                ...state,
+                okrs: action.okrs
+            };
+        case actions.SET_EDIT_SHOW:
+            return {
+                ...state,
+                editShow: action.bool
+            };
+        case actions.SET_WEEKLYVO_EDIT:
+            return {
+                ...state,
+                weeklyVoEdit: action.weeklyVoEdit
             };
         default:
             return state;

@@ -5,6 +5,8 @@ import LayOut from '../pages/layOut/view';
 import WeekList from '../pages/weeklyList/view';
 import Login from '../pages/logIn/view';
 import Edit from '../pages/edit/view';
+import Info from '../pages/info/view';
+import Demo from '../pages/edit';
 
 export default [
   // {
@@ -24,14 +26,24 @@ export default [
         key: 'home'
       },
       {
-        path: '/OKR',
+        path: '/edit',
         component: Edit,
+        key:'edit'
+      },
+      {
+        path:'/details',
+        component:Info,
+        key:'info'
+      },
+      {
+        path: '/OKR',
+        component: Demo,
         exact: true,
         key: 'OKR'
       },
       {
         path: '/attention',
-        component: WeekList,
+        component: Info,
         exact: true,
         key: 'attention'
       },

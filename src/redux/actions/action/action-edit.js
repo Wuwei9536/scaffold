@@ -21,3 +21,24 @@ export const setDataProblem = (dataProblem) => {
         dataProblem
     };
 };
+
+export const setOkr = (okrs) => {
+    return {
+        type:actions.SET_OKR,
+        okrs
+    };
+};
+
+export const setEditShow = (bool) => {
+    return {
+        type:actions.SET_EDIT_SHOW,
+        bool
+    };
+};
+
+export const setWeeklyVoEdit = (weeklyVoEdit) => {
+    return {
+        type:actions.SET_WEEKLYVO_EDIT,
+        weeklyVoEdit
+    };
+};

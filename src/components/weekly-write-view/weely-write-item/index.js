@@ -10,77 +10,119 @@ const { Option, OptGroup } = Select;
 const FromItem = Form.Item;
 
 Quill.register('modules/imageDrop', ImageDrop);
-const modules = {
-    toolbar: [
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-        ['link', 'image'],
-        ['clean']
-    ],
-    imageDrop: true
-};
+// const modules = {
+//     toolbar: [
+//         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+//         [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+//         ['link', 'image'],
+//         ['clean']
+//     ],
+//     imageDrop: true
+// };
 
-const formats = [
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image'
-];
+// const formats = [
+//     'bold', 'italic', 'underline', 'strike', 'blockquote',
+//     'list', 'bullet', 'indent',
+//     'link', 'image'
+// ];
 
 
-export default class WriteItem extends React.Component {
-    static propTypes = {
-        title: PropTypes.string.isRequired,
-        okr: PropTypes.string.isRequired,
-        detail: PropTypes.string.isRequired,
-        buttonName: PropTypes.string.isRequired,
-        okrs: PropTypes.arrayOf(PropTypes.shape({})).isRequired
+class WriteItem extends React.Component {
+    static defaultProps = {
+        title: null,
+        okr: null,
+        detail: null
     }
 
+    static propTypes = {
+        title: PropTypes.string,
+        okr: PropTypes.number,
+        detail: PropTypes.string,
+        okrs: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+        index: PropTypes.number.isRequired,
+        placeholderTitle: PropTypes.string.isRequired,
+        holder: PropTypes.shape({}).isRequired
+    }
+
+
     render() {
-        const { title, okr, detail, buttonName, okrs } = this.props;
+        // eslint-disable-next-line
+        const { title, okr, detail, okrs, index, placeholderTitle, holder, form } = this.props;
+        const { getFieldDecorator } = form;
+        let indexDot = index + 1 + '.';
+        let selectRules = {};
+        if (okr) {
+            selectRules = {
+                rules: [{ required: true, message: 'Please select your okr!' }],
+                initialValue: okr
+            };
+        } else {
+            selectRules = {
+                rules: [{ required: true, message: 'Please select your okr!' }]
+            };
+        }
         return (
             <>
                 <FromItem className={style.marginBottom10}>
-                    <Input placeholder={title} suffix={<Icon type="close" />} />
+                    {
+                        getFieldDecorator('summary', {
+                            rules: [{ required: true, message: 'Please input  summary!' }],
+                            initialValue: title
+                        })(
+                            <Input placeholder={placeholderTitle} suffix={<Icon type="close" />} prefix={<span>{indexDot}</span>} />
+                        )
+                    }
                 </FromItem>
                 <FromItem className={style.marginBottom10 + " " + style.marginLeft20}>
-
-                    <Select
-                        placeholder={okr}
-                    >
-                        {okrs.map((item, index) => {
-                            return (
-                                <OptGroup
-                                    label={item.oDetail}
-                                    key={index.toString()}
-                                >
-                                    {item.krs.map((kr) => {
-                                        return (
-                                            <Option value={kr.krDetail} key={index.toString()}>{kr.krDetail}</Option>
-                                        );
-                                    })}
-                                </OptGroup>
-                            );
-                        })}
-                        {/* <OptGroup label="Manager">
-                            <Option value="jack">Jack</Option>
-                            <Option value="lucy">Lucy</Option>
-                        </OptGroup>
-                        <OptGroup label="Engineer">
-                            <Option value="Yiminghe">yiminghe</Option>
-                        </OptGroup> */}
-                    </Select>
+                    {
+                        getFieldDecorator('krId', selectRules)(
+                            <Select
+                                placeholder={holder.okr}
+                            >
+                                {okrs.map((item, index) => {
+                                    return (
+                                        <OptGroup
+                                            label={item.odetail}
+                                            key={index.toString()}
+                                        >
+                                            {item.krs.map((kr) => {
+                                                return (
+                                                    <Option value={kr.krId} key={kr.krId}>{kr.krDetail}</Option>
+                                                );
+                                            })}
+                                        </OptGroup>
+                                    );
+                                })}
+                            </Select>
+                        )
+                    }
                 </FromItem>
-                <ReactQuill
-                    theme="snow"
-                    className={style.textarea}
-                    modules={this.modules}
-                    formats={this.formats}
-                    onChange={this.onQuillChange}
-                    placeholder={detail}
-                />
-                <Button type="dashed" className={style.addButton}>{buttonName}</Button>
+                <FromItem className={style.marginBottom10}>
+                    {
+                        getFieldDecorator('details', {
+                            rules: [{ required: true, message: 'Please input  details!' }],
+                            initialValue: detail
+                        })(
+                            <ReactQuill
+                                theme="snow"
+                                className={style.textarea}
+                                modules={this.modules}
+                                formats={this.formats}
+                                onChange={this.onQuillChange}
+                                placeholder={holder.content}
+                            />
+                        )
+                    }
+                </FromItem>
             </>
         );
     }
 }
+
+// const WriteItemForm = Form.create({})(WriteItem);
+export default Form.create({
+    onFieldsChange(props, changedFields, allValues) {
+        const { weeklyType, index } = props;
+        props.onChangeField(weeklyType, index, changedFields, allValues);
+    }
+})(WriteItem);

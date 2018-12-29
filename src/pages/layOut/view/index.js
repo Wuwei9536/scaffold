@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { renderRoutes } from 'react-router-config';
-import { Link } from "react-router-dom";
 import { Layout, Menu, Icon } from 'antd';
 import * as LayOutActions from '../../../redux/actions/action/action-layOut';
 import style from '../style/index.less';
+import history from '../../../../utils/history';
 
 
 const {
@@ -38,13 +38,16 @@ class LayoutView extends React.Component {
                 return response.json();
             })
             .then((responseData) => {
-                // eslint-disable-next-line
-                console.log("login success", responseData);
             })
             .catch((error) => {
                 // eslint-disable-next-line
                 console.log("login fail: ", error);
             });
+    };
+
+
+    dealRoute = (path) => {
+        history.push(path);
     }
 
 
@@ -58,11 +61,11 @@ class LayoutView extends React.Component {
                 >
                     <div className="logo"><Icon type="calendar" /></div>
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={["0"]}>
-                        {siderList.map((item, index) => {
+                        {siderList.map((item) => {
                             return (
-                                <Menu.Item key={index.toString()} onClick={this.dealRoute}>
+                                <Menu.Item key={item.to} onClick={(e) => { this.dealRoute(e.key); }}>
                                     <Icon type={item.type} />
-                                    <span className="nav-text"><Link to={item.to}>{item.name}</Link></span>
+                                    <span className="nav-text">{item.name}</span>
                                 </Menu.Item>
                             );
                         })}
@@ -73,7 +76,12 @@ class LayoutView extends React.Component {
                     <Content style={{ margin: '12px 12px 0', overflow: 'initial' }}>
                         {renderRoutes(route.routes)}
                     </Content>
-                    <Footer style={{ textAlign: 'center' }} />
+                    {/* <Footer style={{ textAlign: 'center' }}>
+                        <FooterToolbar extra="extra information">
+                            <Button>Cancel</Button>
+                            <Button type="primary">Submit</Button>
+                        </FooterToolbar>
+                    </Footer> */}
                 </Layout>
             </Layout>
         );

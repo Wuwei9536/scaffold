@@ -7,16 +7,18 @@ import ListItem from './weekly-list-item';
 
 export default class ListView extends React.Component {
     static defaultProps = {
-        qweeks:[]
+        qweeks: []
     }
 
     static propTypes = {
         data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-        qweeks:PropTypes.arrayOf(PropTypes.any)
+        qweeks: PropTypes.arrayOf(PropTypes.any),
+        onButtonClick: PropTypes.func.isRequired,
+        onDetailsClick: PropTypes.func.isRequired
     }
 
     render() {
-        const { data, qweeks } = this.props;
+        const { data, qweeks, onButtonClick, onDetailsClick } = this.props;
         return (
             <>
                 {data.map((item, index) => {
@@ -25,7 +27,12 @@ export default class ListView extends React.Component {
                     for (let i in qweeks) {
                         if (qweeks[i].weeklyVo.month === item.month && qweeks[i].weeklyVo.week === item.week) {
                             bool = true;
-                            box = { details1: qweeks[i].details1, details2: qweeks[i].details2 };
+                            box = {
+                                details1: qweeks[i].details1,
+                                details2: qweeks[i].details2,
+                                id: qweeks[i].weeklyVo.weeklyId,
+                                commentCount: qweeks[i].commentCount
+                            };
                         }
                     }
                     return (
@@ -35,6 +42,8 @@ export default class ListView extends React.Component {
                             bool={bool}
                             box={box}
                             index={index}
+                            onButtonClick={onButtonClick}
+                            onDetailsClick={onDetailsClick}
                         />
                     );
                 })}

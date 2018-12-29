@@ -17,12 +17,12 @@ class App extends React.Component {
 
     render() {
         const { history, authority } = this.props;
-        const Authorized = RenderAuthorized("user");
+        const Authorized = RenderAuthorized(authority);
         return (
             <Router history={history}>
                 <Switch>
                     <Route path='/user' exact component={Login} />
-                    <Authorized authority={['user', 'admin']} noMatch={<Redirect to="/user" />}>
+                    <Authorized authority={['wien']} noMatch={<Redirect to="/user" />}>
                         {renderRoutes(Routes)}
                     </Authorized>
                 </Switch>

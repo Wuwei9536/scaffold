@@ -1,7 +1,7 @@
 import actions from '../../actions/types/type-Login';
 
 const ladpinitial = {
-    ladp:''
+    ladp:window.localStorage.getItem('account')
 };
 
 export default function Login(state = ladpinitial, action) {

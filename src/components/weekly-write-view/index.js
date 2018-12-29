@@ -5,23 +5,30 @@ import WriteItem from './weely-write-item/index';
 export default class WriteView extends React.Component {
     static propTypes = {
         data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-        buttonName: PropTypes.string.isRequired,
-        okrs: PropTypes.arrayOf(PropTypes.shape({})).isRequired
+        okrs: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+        holder: PropTypes.shape({}).isRequired,
+        title: PropTypes.string.isRequired,
+        onChangeField: PropTypes.func.isRequired,
+        weeklyType: PropTypes.number.isRequired
     }
 
     render() {
-        const { data, buttonName, okrs } = this.props;
+        const { data, okrs, title, holder, onChangeField, weeklyType } = this.props;
         return (
             <>
                 {data.map((item, index) => {
                     return (
                         <WriteItem
                             key={index.toString()}
-                            buttonName={buttonName}
                             title={item.summary}
-                            okr={item.oDetail}
+                            okr={item.krId}
                             detail={item.details}
                             okrs={okrs}
+                            index={index}
+                            placeholderTitle={title}
+                            holder={holder}
+                            onChangeField={onChangeField}
+                            weeklyType={weeklyType}
                         />
                     );
                 })}
