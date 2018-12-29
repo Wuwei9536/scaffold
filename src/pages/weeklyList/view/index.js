@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import moment from 'moment';
-import { Tag, Row, Col, Form, Card, Select, List, Avatar, Button, Icon } from 'antd';
+import { Form, Card, Icon, Spin } from 'antd';
 import style from '../style/index.less';
 import ListView from '../../../components/weekly-list-view';
 import SelectView from '../../../components/select-view';
 import * as WeeklyListActions from '../../../redux/actions/action/action-weeklyList';
 import InitTimeShow from '../../../../utils/weekTime';
-import Loading from './loading';
 import history from '../../../../utils/history';
 
 const FormItem = Form.Item;
@@ -30,9 +29,6 @@ class WeeklyList extends React.Component {
     static propTypes = {
         data: PropTypes.shape({}).isRequired,
         weeklyListActions: PropTypes.shape({}).isRequired
-        // route: PropTypes.shape({
-        //     routes: PropTypes.arrayOf(PropTypes.shape({}))
-        // }).isRequired
     }
 
 
@@ -57,6 +53,7 @@ class WeeklyList extends React.Component {
             weeklyListActions.setWeeklyListData(res.data);
             this.setState({ requestResult: true });
         }).catch((error) => {
+            // eslint-disable-next-line
             console.log("error", error);
         });
     }
@@ -139,7 +136,7 @@ class WeeklyList extends React.Component {
                                 qweeks={data.weeklyInfo.qweeks}
                                 onButtonClick={this.onButtonClick}
                             />
-                        </Card>) : <Icon type="loading" className={style.localCenter} />}
+                        </Card>) : <Spin tip="Loading" className={style.loading} />}
             </>
         );
     }

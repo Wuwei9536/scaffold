@@ -2,32 +2,14 @@ import React from "react";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Tag, Row, Col, Form, Card, Select, List, Icon, Button, Input } from 'antd';
-import ReactQuill, { Quill } from 'react-quill';
-import { ImageDrop } from 'quill-image-drop-module';
+import { Tag, Row, Form, Card, Button, Spin, Modal } from 'antd';
 import FooterToolbar from 'ant-design-pro/lib/FooterToolbar';
-import 'react-quill/dist/quill.snow.css';
 import style from '../style/index.less';
 import WriteView from '../../../components/weekly-write-view/index';
 import * as editActions from '../../../redux/actions/action/action-edit';
 import history from '../../../../utils/history';
 
-Quill.register('modules/imageDrop', ImageDrop);
-// const modules = {
-//     toolbar: [
-//         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-//         [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-//         ['link', 'image'],
-//         ['clean']
-//     ],
-//     imageDrop: true
-// };
-
-// const formats = [
-//     'bold', 'italic', 'underline', 'strike', 'blockquote',
-//     'list', 'bullet', 'indent',
-//     'link', 'image'
-// ];
+const confirm = Modal.confirm;
 
 const placeholder = {
     titleProgress: "进展，限制40字",
@@ -37,10 +19,13 @@ const placeholder = {
     content: "请输入内容"
 };
 
-
 class Edit extends React.Component {
     state = {
         editShow: false
+    }
+
+    static defaultProps = {
+        weeklyVoEdit: {}
     }
 
     static propTypes = {
@@ -49,7 +34,7 @@ class Edit extends React.Component {
         dataProblem: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
         okrs: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
         editActions: PropTypes.shape({}).isRequired,
-        weeklyVoEdit: PropTypes.shape({}).isRequired
+        weeklyVoEdit: PropTypes.shape({})
     }
 
     componentDidMount() {
@@ -75,6 +60,7 @@ class Edit extends React.Component {
         editActions.setDataProgress([{}]);
         editActions.setDataPlan([{}]);
         editActions.setDataProblem([{}]);
+        editActions.setWeeklyVoEdit({});
     }
 
 
@@ -123,24 +109,48 @@ class Edit extends React.Component {
     }
 
     addItem = (id) => {
-        const { dataProgress, dataPlan, dataProblem, editActions } = this.props;
-        let addData = [];
-        switch (id) {
-            case 1:
-                addData = dataProgress.concat([{}]);
-                editActions.setDataProgress(addData);
-                break;
-            case 2:
-                addData = dataPlan.concat([{}]);
-                editActions.setDataPlan(addData);
-                break;
-            case 3:
-                addData = dataProblem.concat([{}]);
-                editActions.setDataProblem(addData);
-                break;
-            default:
-                break;
-        }
+        this.form.validateFields((errors, value) => {
+            console.log('%cvalue: ', 'font-size:15px;background-color: rgb(135, 208, 104);', value);
+            console.log('%cerrors: ', 'font-size:15px;background-color: rgb(135, 208, 104);', errors);
+            if (!errors) {
+                const { dataProgress, dataPlan, dataProblem, editActions } = this.props;
+                let addData = [];
+                switch (id) {
+                    case 1:
+                        addData = dataProgress.concat([{}]);
+                        editActions.setDataProgress(addData);
+                        break;
+                    case 2:
+                        addData = dataPlan.concat([{}]);
+                        editActions.setDataPlan(addData);
+                        break;
+                    case 3:
+                        addData = dataProblem.concat([{}]);
+                        editActions.setDataProblem(addData);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        // const { dataProgress, dataPlan, dataProblem, editActions } = this.props;
+        // let addData = [];
+        // switch (id) {
+        //     case 1:
+        //         addData = dataProgress.concat([{}]);
+        //         editActions.setDataProgress(addData);
+        //         break;
+        //     case 2:
+        //         addData = dataPlan.concat([{}]);
+        //         editActions.setDataPlan(addData);
+        //         break;
+        //     case 3:
+        //         addData = dataProblem.concat([{}]);
+        //         editActions.setDataProblem(addData);
+        //         break;
+        //     default:
+        //         break;
+        // }
     }
 
     onChangeField = (weeklyType, index, changedFields, allValues) => {
@@ -225,6 +235,66 @@ class Edit extends React.Component {
         history.push(path);
     }
 
+    showConfirm = () => {
+        confirm({
+            title: '点击取消将不会保存已编辑的内容?',
+            content: '你确定要取消吗？',
+            cancelText: '取消',
+            okText: '确定',
+            onOk() {
+                history.push('/');
+            },
+            onCancel() { }
+        });
+    }
+
+
+    delete = (e, index, weeklyType, summary) => {
+        const { dataProgress, dataPlan, dataProblem, editActions } = this.props;
+        let restData = [];
+        let spliceData = this.spliceData;
+        if (summary) {
+            confirm({
+                title: '删除条目将同时删除已输入的内容',
+                content: '你确定要删除吗？',
+                cancelText: '取消',
+                okText: '确定',
+                onOk() {
+                    spliceData(weeklyType, dataProgress, dataPlan, dataProblem, restData, index, editActions);
+                },
+                onCancel() { }
+            });
+        } else {
+            spliceData(weeklyType, dataProgress, dataPlan, dataProblem, restData, index, editActions);
+        }
+    }
+
+    spliceData = (weeklyType, dataProgress, dataPlan, dataProblem, restData, index, editActions) => {
+        switch (weeklyType) {
+            case 1:
+                dataProgress.splice(index, 1);
+                restData = [...dataProgress];
+                editActions.setDataProgress(restData);
+                break;
+            case 2:
+                dataPlan.splice(index, 1);
+                restData = [...dataPlan];
+                editActions.setDataPlan(restData);
+                break;
+            case 3:
+                dataProblem.splice(index, 1);
+                restData = [...dataProblem];
+                editActions.setDataProblem(restData);
+                break;
+            default:
+                break;
+        }
+    }
+
+    takeValidateFields = (ref) => {
+        this.form = ref.props.form;
+    }
+
     render() {
         const { dataProgress, dataPlan, dataProblem, okrs, weeklyVoEdit } = this.props;
         const { editShow } = this.state;
@@ -235,10 +305,14 @@ class Edit extends React.Component {
                         <>
                             <div className={style.marginBottom100}>
                                 <Card>
-                                    <span className={style.weekTime}>
-                                        {"Week " + weeklyVoEdit.month + "-" + weeklyVoEdit.week}
-                                    </span>
-                                    <span>{weeklyVoEdit.weekTime}</span>
+                                    {weeklyVoEdit
+                                        ? <>
+                                            <span className={style.weekTime}>
+                                                {"Week " + weeklyVoEdit.month + "-" + weeklyVoEdit.week}
+                                            </span>
+                                            <span>{weeklyVoEdit.weekTime}</span>
+                                        </>
+                                        : null}
                                     <Card className={style.cardBackground}>
                                         <Row type="flex" justify="space-around">
                                             <div>
@@ -253,6 +327,8 @@ class Edit extends React.Component {
                                                         holder={placeholder}
                                                         onChangeField={this.onChangeField}
                                                         weeklyType={1}
+                                                        takeValidateFields={this.takeValidateFields}
+                                                        onDelete={this.delete}
                                                     />
                                                     <Button type="dashed" className={style.addButton} onClick={(e) => { this.addItem(1, e); }}>添加进展</Button>
                                                 </Form>
@@ -273,6 +349,8 @@ class Edit extends React.Component {
                                                         holder={placeholder}
                                                         onChangeField={this.onChangeField}
                                                         weeklyType={2}
+                                                        takeValidateFields={this.takeValidateFields}
+                                                        onDelete={this.delete}
                                                     />
                                                 </Form>
                                                 <Button type="dashed" className={style.addButton} onClick={(e) => { this.addItem(2, e); }}>添加计划</Button>
@@ -293,6 +371,8 @@ class Edit extends React.Component {
                                                         holder={placeholder}
                                                         onChangeField={this.onChangeField}
                                                         weeklyType={3}
+                                                        takeValidateFields={this.takeValidateFields}
+                                                        onDelete={this.delete}
                                                     />
                                                 </Form>
                                                 <Button type="dashed" className={style.addButton} onClick={(e) => { this.addItem(3, e); }}>添加问题</Button>
@@ -303,10 +383,10 @@ class Edit extends React.Component {
                             </div>
                             <FooterToolbar>
                                 <Button type="primary" onClick={(e) => { this.save(e, this.editParam.from); }}>保存</Button>
-                                <Button>取消</Button>
+                                <Button onClick={this.showConfirm}>取消</Button>
                             </FooterToolbar>
                         </>
-                    ) : null}
+                    ) : <Spin tip="Loading" className={style.loading} />}
             </>
         );
     }

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Tag, Row, Col, Icon, Card, Select, List, Avatar, Button } from 'antd';
+import { Tag, Row, Col, Icon, Card, Button } from 'antd';
 import style from './weekly-list-item.less';
 
 
@@ -47,7 +47,10 @@ export default class ListItem extends React.Component {
                                         <p className={style.marginbottom0}>{box.details1}</p>
                                     </div>
                                     <div className={style.cardItem}>
-                                        <Tag color="#87d068">进展</Tag>
+                                        {box.weeklyType2 === 1
+                                            ? <Tag color="#87d068">进展</Tag>
+                                            : <Tag color='rgb(16, 142, 233)'>计划</Tag>
+                                        }
                                         <p className={style.marginbottom0}>{box.details2}</p>
                                     </div>
                                     <div className={style.cardItem}>
@@ -56,8 +59,8 @@ export default class ListItem extends React.Component {
                                 </Card>) : null
                     }
                     {
-                        // (index === 0 && data.month === moment().month() + 1 && !bool)
-                        true
+                        (index === 0 && data.month === moment().month() + 1 && !bool)
+                            // true
                             ? (
                                 <Card bordered={false} className={style.textCenter}>
                                     <p>你还未填写本周周报，是否新建?</p>

@@ -18,8 +18,10 @@ export default class WeeklyComments extends React.Component {
                         let time = new Date(item.commentTime).toLocaleString();
                         return (
                             <Comment
+                                key={item.commentTime}
                                 author={<h3>{item.userName}</h3>}
                                 content={(
+                                    // eslint-disable-next-line
                                     <div className={style.comment} dangerouslySetInnerHTML={{ __html: item.comment }} />
                                 )}
                                 datetime={(

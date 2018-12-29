@@ -4,8 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import ReactQuill, { Quill } from 'react-quill';
 import { ImageDrop } from 'quill-image-drop-module';
-import moment from 'moment';
-import { Tag, Row, Comment, Form, Card, Avatar, Tooltip, Spin, Button } from 'antd';
+import { Tag, Row, Form, Card, Spin, Button } from 'antd';
 import FooterToolbar from 'ant-design-pro/lib/FooterToolbar';
 import style from '../style/index.less';
 import InfoView from '../../../components/info-view';
@@ -138,7 +137,7 @@ class Info extends React.Component {
                                 <div>{"创建于 " + noEditTime}</div>
                                 <Card className={style.cardBackground}>
                                     <Row type="flex" justify="space-around">
-                                        <div>
+                                        <div className={style.paddingBottom10}>
                                             <Tag className={style.leftTag}>本周进展</Tag>
                                         </div>
                                         <div className={style.widthFlex}>
@@ -150,7 +149,7 @@ class Info extends React.Component {
                                 </Card>
                                 <Card className={style.cardBackground}>
                                     <Row type="flex" justify="space-around">
-                                        <div>
+                                        <div className={style.paddingBottom10}>
                                             <Tag className={style.leftTagPlan}>下周计划</Tag>
                                         </div>
                                         <div className={style.widthFlex}>
@@ -162,7 +161,7 @@ class Info extends React.Component {
                                 </Card>
                                 <Card className={style.cardBackground}>
                                     <Row type="flex" justify="space-around">
-                                        <div>
+                                        <div className={style.paddingBottom10}>
                                             <Tag className={style.leftTagProblem}>遗留问题</Tag>
                                         </div>
                                         <div className={style.widthFlex}>
@@ -201,7 +200,7 @@ class Info extends React.Component {
                             <Button type="primary" onClick={this.backWeekly}>返回我的周报</Button>
                             <Button onClick={this.toEditor}>编辑</Button>
                         </FooterToolbar>
-                    </> : <Spin />}
+                    </> : <Spin tip='Loading' className={style.loading} />}
             </>
         );
     }

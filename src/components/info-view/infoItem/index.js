@@ -22,6 +22,7 @@ export default class infoItem extends React.Component {
                     {/* eslint-disable-next-line */}
                     <div className={style.tagTextKr}>{odetail}/{krDetail}</div>
                 </Tag>
+                {/* eslint-disable-next-line */}
                 <div className={style.textDetails} dangerouslySetInnerHTML={{ __html: details }} />
             </Card>);
     }

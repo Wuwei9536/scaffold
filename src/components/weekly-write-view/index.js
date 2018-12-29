@@ -9,11 +9,13 @@ export default class WriteView extends React.Component {
         holder: PropTypes.shape({}).isRequired,
         title: PropTypes.string.isRequired,
         onChangeField: PropTypes.func.isRequired,
-        weeklyType: PropTypes.number.isRequired
+        weeklyType: PropTypes.number.isRequired,
+        takeValidateFields: PropTypes.func.isRequired,
+        onDelete:PropTypes.func.isRequired
     }
 
     render() {
-        const { data, okrs, title, holder, onChangeField, weeklyType } = this.props;
+        const { data, okrs, title, holder, onChangeField, weeklyType, takeValidateFields, onDelete } = this.props;
         return (
             <>
                 {data.map((item, index) => {
@@ -29,6 +31,8 @@ export default class WriteView extends React.Component {
                             holder={holder}
                             onChangeField={onChangeField}
                             weeklyType={weeklyType}
+                            takeValidateFields={takeValidateFields}
+                            onDelete={onDelete}
                         />
                     );
                 })}

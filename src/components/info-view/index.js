@@ -16,7 +16,7 @@ export default class infoView extends React.Component {
                 {data.map((item, index) => {
                     return (
                         <InfoItem
-                            key={item.krId}
+                            key={index.toString()}
                             summary={item.summary}
                             odetail={item.odetail}
                             krDetail={item.krDetail}

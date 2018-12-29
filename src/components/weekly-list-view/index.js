@@ -31,7 +31,9 @@ export default class ListView extends React.Component {
                                 details1: qweeks[i].details1,
                                 details2: qweeks[i].details2,
                                 id: qweeks[i].weeklyVo.weeklyId,
-                                commentCount: qweeks[i].commentCount
+                                commentCount: qweeks[i].commentCount,
+                                weeklyType1:qweeks[i].weeklyType1,
+                                weeklyType2:qweeks[i].weeklyType2
                             };
                         }
                     }
